@@ -1,0 +1,15 @@
+# PHPStan Extension for OpenEMR
+#
+# This is an alias for module.neon for backward compatibility.
+# By default, includes all rules for comprehensive analysis.
+#
+# Include this in your phpstan.neon with:
+#   includes:
+#     - vendor/opencoreemr/openemr-phpstan-rules/extension.neon
+#
+# @author    Michael A. Smith <michael@opencoreemr.com>
+# @copyright Copyright (c) 2025 OpenCoreEMR Inc
+# @license   https://github.com/openCoreEMR/openemr-phpstan-rules/blob/main/LICENSE GNU General Public License 3
+
+includes:
+    - module.neon

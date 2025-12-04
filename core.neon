@@ -1,0 +1,38 @@
+# PHPStan Extension for OpenEMR Core
+#
+# This configuration includes rules for OpenEMR core development:
+# - Database: Forbid legacy SQL functions and Laminas-DB
+# - Globals: Forbid direct $GLOBALS access
+# - Testing: Forbid @covers annotations
+#
+# Include this in your phpstan.neon with:
+#   includes:
+#     - vendor/opencoreemr/openemr-phpstan-rules/core.neon
+#
+# @author    Michael A. Smith <michael@opencoreemr.com>
+# @copyright Copyright (c) 2025 OpenCoreEMR Inc
+# @license   https://github.com/openCoreEMR/openemr-phpstan-rules/blob/main/LICENSE GNU General Public License 3
+
+services:
+    # Database Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenFunctionsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenClassesRule
+      tags:
+          - phpstan.rules.rule
+
+    # Globals Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Globals\ForbiddenGlobalsAccessRule
+      tags:
+          - phpstan.rules.rule
+
+    # Testing Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationOnClassRule
+      tags:
+          - phpstan.rules.rule

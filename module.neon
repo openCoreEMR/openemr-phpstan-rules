@@ -1,0 +1,54 @@
+# PHPStan Extension for OpenEMR Module Development
+#
+# This configuration includes all rules for OpenEMR module development:
+# - All core rules (database, globals, testing)
+# - Module-specific rules (controllers, request/response handling)
+#
+# Include this in your phpstan.neon with:
+#   includes:
+#     - vendor/openemr/phpstan-openemr-rules/module.neon
+#
+# @author    Michael A. Smith <michael@opencoreemr.com>
+# @copyright Copyright (c) 2025 OpenCoreEMR Inc
+# @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+
+services:
+    # Database Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenFunctionsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenClassesRule
+      tags:
+          - phpstan.rules.rule
+
+    # Globals Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Globals\ForbiddenGlobalsAccessRule
+      tags:
+          - phpstan.rules.rule
+
+    # Testing Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationOnClassRule
+      tags:
+          - phpstan.rules.rule
+
+    # Module-Specific Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Module\CatchThrowableNotExceptionRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Module\NoSuperGlobalsInControllersRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Module\NoLegacyResponseMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Module\ControllersMustReturnResponseRule
+      tags:
+          - phpstan.rules.rule

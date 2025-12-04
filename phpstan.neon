@@ -1,0 +1,19 @@
+parameters:
+    level: 8
+    paths:
+        - src
+
+    # PHP version
+    phpVersion: 80100
+
+    # Ignore errors in vendor
+    excludePaths:
+        - vendor
+
+    # Additional checks
+    checkMissingCallableSignature: true
+    checkUninitializedProperties: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+
+    # Report always true conditions
+    reportAlwaysTrueInLastCondition: true

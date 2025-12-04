@@ -6,11 +6,11 @@
 #
 # Include this in your phpstan.neon with:
 #   includes:
-#     - vendor/openemr/phpstan-openemr-rules/module.neon
+#     - vendor/opencoreemr/openemr-phpstan-rules/module.neon
 #
 # @author    Michael A. Smith <michael@opencoreemr.com>
 # @copyright Copyright (c) 2025 OpenCoreEMR Inc
-# @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+# @license   https://github.com/OpenCoreEMR/openemr-phpstan-rules/blob/master/LICENSE GNU General Public License 3
 
 services:
     # Database Rules

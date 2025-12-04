@@ -5,7 +5,7 @@ Composer-installable PHPStan rules for OpenEMR core and module development. Enfo
 ## Installation
 
 ```bash
-composer require --dev openemr/phpstan-openemr-rules
+composer require --dev opencoreemr/openemr-phpstan-rules
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ Include the core ruleset in your `phpstan.neon`:
 
 ```neon
 includes:
-    - vendor/openemr/phpstan-openemr-rules/core.neon
+    - vendor/opencoreemr/openemr-phpstan-rules/core.neon
 ```
 
 ### For OpenEMR Module Development
@@ -25,7 +25,7 @@ Include the module ruleset in your `phpstan.neon`:
 
 ```neon
 includes:
-    - vendor/openemr/phpstan-openemr-rules/module.neon
+    - vendor/opencoreemr/openemr-phpstan-rules/module.neon
 ```
 
 ## Rules

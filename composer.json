@@ -52,7 +52,8 @@
         "check": [
             "@phpcs",
             "@phpstan",
-            "@rector"
+            "@rector",
+            "@test"
         ],
         "fix": [
             "@phpcbf",
@@ -62,8 +63,10 @@
         "phpcbf": "phpcbf",
         "phpcs": "phpcs",
         "phpstan": "phpstan analyse -c phpstan.neon src",
+        "phpunit": "phpunit --testdox",
+        "phpunit-coverage": "phpunit --coverage-html htmlcov --coverage-text",
         "rector": "rector process --dry-run",
         "rector-fix": "rector process",
-        "test": "phpunit"
+        "test": "@phpunit"
     }
 }

@@ -15,6 +15,7 @@
 namespace OpenCoreEMR\PHPStan\Rules\Module;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -72,26 +73,19 @@ class ControllersMustReturnResponseRule implements Rule
             ];
         }
 
-        // Check if return type is void
-        $function = $scope->getFunction();
-        if ($function instanceof \PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection) {
-            $variants = $function->getVariants();
-            if (count($variants) > 0) {
-                $returnType = $variants[0]->getReturnType();
-                if ($returnType->isVoid()->yes()) {
-                    return [
-                        RuleErrorBuilder::message(
-                            sprintf(
-                                'Controller method %s() must return Response object, not void.',
-                                $methodName
-                            )
-                        )
-                            ->identifier('openemr.controllerMustReturnResponse')
-                            ->tip('Controllers should return Response, JsonResponse, RedirectResponse, or BinaryFileResponse')
-                            ->build()
-                    ];
-                }
-            }
+        // Check if return type is void (using AST to avoid reflection issues in tests)
+        if ($node->returnType instanceof Identifier && $node->returnType->name === 'void') {
+            return [
+                RuleErrorBuilder::message(
+                    sprintf(
+                        'Controller method %s() must return Response object, not void.',
+                        $methodName
+                    )
+                )
+                    ->identifier('openemr.controllerMustReturnResponse')
+                    ->tip('Controllers should return Response, JsonResponse, RedirectResponse, or BinaryFileResponse')
+                    ->build()
+            ];
         }
 
         return [];

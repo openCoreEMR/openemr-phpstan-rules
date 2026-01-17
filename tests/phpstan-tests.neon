@@ -1,0 +1,4 @@
+parameters:
+	tipsOfTheDay: false
+	scanDirectories:
+		- %currentWorkingDirectory%/tests/Rules

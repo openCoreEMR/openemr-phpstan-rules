@@ -4,3 +4,4 @@ composer.lock
 .phpunit.cache/
 coverage-report/
 .php-cs-fixer.cache
+/htmlcov/

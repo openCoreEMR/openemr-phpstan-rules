@@ -16,7 +16,12 @@
     "void",
     "object",
     "mixed",
-    "never"
+    "never",
+    "PHPStan\\Analyser\\Scope",
+    "PHPStan\\Node\\InClassMethodNode",
+    "PHPStan\\Reflection\\Php\\PhpFunctionFromParserNodeReflection",
+    "PHPStan\\Rules\\Rule",
+    "PHPStan\\Rules\\RuleErrorBuilder"
   ],
   "php-core-extensions": [
     "Core",

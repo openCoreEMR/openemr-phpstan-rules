@@ -36,3 +36,8 @@ services:
     - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationOnClassRule
       tags:
           - phpstan.rules.rule
+
+    # Exception Handling Rules
+    - class: OpenCoreEMR\PHPStan\Rules\ExceptionHandling\CatchThrowableNotExceptionRule
+      tags:
+          - phpstan.rules.rule

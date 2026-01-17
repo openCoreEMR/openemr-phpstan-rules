@@ -36,11 +36,12 @@ services:
       tags:
           - phpstan.rules.rule
 
-    # Module-Specific Rules
-    - class: OpenCoreEMR\PHPStan\Rules\Module\CatchThrowableNotExceptionRule
+    # Exception Handling Rules
+    - class: OpenCoreEMR\PHPStan\Rules\ExceptionHandling\CatchThrowableNotExceptionRule
       tags:
           - phpstan.rules.rule
 
+    # Module-Specific Rules
     - class: OpenCoreEMR\PHPStan\Rules\Module\NoSuperGlobalsInControllersRule
       tags:
           - phpstan.rules.rule

@@ -1,7 +1,8 @@
 # PHPStan Extension for OpenEMR Core
 #
 # This configuration includes rules for OpenEMR core development:
-# - Database: Forbid legacy SQL functions and Laminas-DB
+# - Database: Forbid legacy SQL functions, methods, and Laminas-DB
+# - Http: Forbid raw curl_* functions
 # - Globals: Forbid direct $GLOBALS access
 # - Testing: Forbid @covers annotations
 #
@@ -20,6 +21,19 @@ services:
           - phpstan.rules.rule
 
     - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenClassesRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenStaticMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    # Http Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Http\ForbiddenCurlFunctionsRule
       tags:
           - phpstan.rules.rule
 

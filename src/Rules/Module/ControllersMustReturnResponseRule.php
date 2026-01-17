@@ -74,7 +74,7 @@ class ControllersMustReturnResponseRule implements Rule
 
         // Check if return type is void
         $function = $scope->getFunction();
-        if ($function !== null) {
+        if ($function instanceof \PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection) {
             $variants = $function->getVariants();
             if (count($variants) > 0) {
                 $returnType = $variants[0]->getReturnType();

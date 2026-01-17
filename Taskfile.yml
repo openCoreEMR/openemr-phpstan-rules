@@ -1,0 +1,86 @@
+# https://taskfile.dev
+# Task runner for code quality checks
+#
+# SEPARATION OF CONCERNS:
+#   Taskfile: Convenience wrappers for common operations
+#   Composer: Core code quality checks (phpcs, phpstan, rector)
+#
+# Installation: https://taskfile.dev/installation/
+#   macOS:   brew install go-task
+#   Linux:   sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+#
+# Usage:
+#   task --list              # Show all available tasks
+#   task check               # Run all code quality checks
+#   task fix                 # Auto-fix code style issues
+
+version: '3'
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+    - task --list
+
+  # === Code Quality (delegates to Composer scripts) ===
+
+  check:
+    desc: Run all code quality checks (calls pre-commit run -a)
+    cmds:
+    - pre-commit run -a
+
+  check:phpcs:
+    desc: Run PHP CodeSniffer (calls composer phpcs)
+    cmds:
+    - composer phpcs
+
+  check:phpstan:
+    desc: Run PHPStan (calls composer phpstan)
+    cmds:
+    - composer phpstan
+
+  check:rector:
+    desc: Run Rector dry-run (calls composer rector)
+    cmds:
+    - composer rector
+
+  fix:
+    desc: Auto-fix code style (calls composer fix)
+    cmds:
+    - composer fix
+
+  fix:phpcs:
+    desc: Auto-fix PHP CodeSniffer issues (calls composer phpcbf)
+    cmds:
+    - composer phpcbf
+
+  fix:rector:
+    desc: Apply Rector fixes (calls composer rector-fix)
+    cmds:
+    - composer rector-fix
+
+  # === Testing ===
+
+  test:
+    desc: Run PHPUnit tests
+    cmds:
+    - composer test
+
+  # === Development Helpers ===
+
+  composer:install:
+    desc: Install composer dependencies
+    cmds:
+    - composer install
+    - echo "Composer dependencies installed"
+
+  composer:update:
+    desc: Update composer dependencies
+    cmds:
+    - composer update
+    - echo "Composer dependencies updated"
+
+  lint:
+    desc: Run PHP syntax check
+    cmds:
+    - composer php-lint

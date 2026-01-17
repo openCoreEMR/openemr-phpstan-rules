@@ -1,0 +1,29 @@
+{
+  "symbol-whitelist": [
+    "null",
+    "true",
+    "false",
+    "static",
+    "self",
+    "parent",
+    "array",
+    "string",
+    "int",
+    "float",
+    "bool",
+    "callable",
+    "iterable",
+    "void",
+    "object",
+    "mixed",
+    "never"
+  ],
+  "php-core-extensions": [
+    "Core",
+    "standard",
+    "json",
+    "pcre",
+    "SPL"
+  ],
+  "scan-files": []
+}

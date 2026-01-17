@@ -46,13 +46,13 @@ class ForbiddenClassesRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        return iterator_to_array($this->getErrors($node, $scope));
+        return iterator_to_array($this->getErrors($node));
     }
 
     /**
      * @return \Generator<\PHPStan\Rules\RuleError>
      */
-    private function getErrors(Use_ $node, Scope $scope): \Generator
+    private function getErrors(Use_ $node): \Generator
     {
         foreach ($node->uses as $use) {
             $importedName = $use->name->toString();

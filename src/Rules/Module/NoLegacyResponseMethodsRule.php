@@ -41,7 +41,6 @@ class NoLegacyResponseMethodsRule implements Rule
     }
 
     /**
-     * @param Node $node
      * @return array<\PHPStan\Rules\RuleError>
      */
     public function processNode(Node $node, Scope $scope): array

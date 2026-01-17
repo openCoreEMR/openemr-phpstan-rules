@@ -12,7 +12,7 @@
  * @license   https://github.com/openCoreEMR/openemr-phpstan-rules/blob/main/LICENSE GNU General Public License 3
  */
 
-namespace OpenCoreEMR\PHPStan\Rules\Module;
+namespace OpenCoreEMR\PHPStan\Rules\ExceptionHandling;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Catch_;

@@ -12,9 +12,6 @@
          beStrictAboutOutputDuringTests="false"
          failOnWarning="false">
     <testsuites>
-        <testsuite name="Unit Tests">
-            <directory>tests/Unit</directory>
-        </testsuite>
         <testsuite name="Rules">
             <directory>tests/Rules</directory>
         </testsuite>

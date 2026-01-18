@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.0](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.5.0...0.9.0) (2026-01-18)
+
+
+### Features
+
+* **deps:** add phpstan-disallowed-calls and phpstan-deprecation-rules ([#16](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/16)) ([6b47192](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/6b4719296aaeb4c72b0e8bcd8f54ab25f698278f))
+
+
+### Miscellaneous Chores
+
+* **release:** 0.9.0 ([3cdc8c0](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/3cdc8c02acf7a5fe63bd4a83ae1d1aa24d9df77a))
+
 ## [0.5.0](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.1.0...0.5.0) (2026-01-17)
 
 

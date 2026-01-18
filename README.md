@@ -8,33 +8,32 @@ Composer-installable PHPStan rules for OpenEMR core and module development. Enfo
 composer require --dev opencoreemr/openemr-phpstan-rules
 ```
 
-## Usage
+The rules are automatically loaded via [phpstan/extension-installer](https://github.com/phpstan/extension-installer). No manual configuration needed.
 
-### For OpenEMR Core Development
+**Important:** Do not manually include `extension.neon` in your phpstan configuration. The extension-installer handles this automatically. Adding a manual include will cause "File included multiple times" warnings.
 
-Include the core ruleset in your `phpstan.neon`:
+## Bundled Extensions
 
-```neon
-includes:
-    - vendor/opencoreemr/openemr-phpstan-rules/core.neon
-```
+This package includes and configures these PHPStan extensions:
 
-### For OpenEMR Module Development
-
-Include the module ruleset in your `phpstan.neon`:
-
-```neon
-includes:
-    - vendor/opencoreemr/openemr-phpstan-rules/module.neon
-```
+- **[spaze/phpstan-disallowed-calls](https://github.com/spaze/phpstan-disallowed-calls)** - Forbids legacy function calls
+- **[phpstan/phpstan-deprecation-rules](https://github.com/phpstan/phpstan-deprecation-rules)** - Reports usage of deprecated code
 
 ## Rules
 
-### Core Rules (for OpenEMR Core and Modules)
+### Why Custom Rules Instead of Just `@deprecated`?
 
-#### Database Rules
+This package provides custom rules that forbid specific functions by name (e.g., `sqlQuery()`, `call_user_func()`). You might wonder why we don't just mark these functions as `@deprecated` in OpenEMR and rely on `phpstan-deprecation-rules`.
 
-**ForbiddenFunctionsRule**
+**The reason: module analysis without OpenEMR loaded.**
+
+When running PHPStan on a standalone OpenEMR module, OpenEMR core may not be installed as a dependency or autoloaded. PHPStan's deprecation rules require the actual function/class definitions to read `@deprecated` annotations. If OpenEMR isn't available at scan-time, those annotations can't be read.
+
+Our custom rules work by **function name matching**, so they catch forbidden calls even when the function definitions aren't available. This ensures modules get the same static analysis protection whether they're analyzed standalone or within a full OpenEMR installation.
+
+### Database Rules
+
+**Disallowed SQL Functions** (via spaze/phpstan-disallowed-calls)
 - **Forbids:** Legacy `sql.inc.php` functions (`sqlQuery`, `sqlStatement`, `sqlInsert`, etc.)
 - **Requires:** `QueryUtils` methods instead
 - **Example:**
@@ -50,7 +49,7 @@ includes:
 - **Forbids:** Laminas-DB classes (`Laminas\Db\Adapter`, `Laminas\Db\Sql`, etc.)
 - **Requires:** `QueryUtils` or `DatabaseQueryTrait`
 
-#### Globals Rules
+### Globals Rules
 
 **ForbiddenGlobalsAccessRule**
 - **Forbids:** Direct `$GLOBALS` array access
@@ -65,7 +64,7 @@ includes:
   $value = $globals->get('some_setting');
   ```
 
-#### Testing Rules
+### Testing Rules
 
 **NoCoversAnnotationRule**
 - **Forbids:** `@covers` annotations on test methods
@@ -75,11 +74,48 @@ includes:
 - **Forbids:** `@covers` annotations on test classes
 - **Rationale:** Same as above - incomplete coverage tracking
 
-### Module-Specific Rules (for OpenEMR Modules Only)
+### HTTP Rules
 
-These additional rules enforce Symfony-inspired MVC patterns in OpenEMR modules.
+**ForbiddenCurlFunctionsRule**
+- **Forbids:** Raw `curl_*` functions (`curl_init`, `curl_exec`, `curl_setopt`, etc.)
+- **Requires:** PSR-18 HTTP client
+- **Example:**
+  ```php
+  // ❌ Forbidden
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response = curl_exec($ch);
 
-#### CatchThrowableNotExceptionRule
+  // ✅ Required - use a PSR-18 HTTP client
+  $response = $httpClient->sendRequest($request);
+  ```
+
+### Legacy PHP Rules
+
+**Disallowed call_user_func** (via spaze/phpstan-disallowed-calls)
+- **Forbids:** `call_user_func()` and `call_user_func_array()`
+- **Requires:** First-class callables (PHP 8.1+)
+- **Example:**
+  ```php
+  // ❌ Forbidden
+  call_user_func([$object, 'method'], $arg1, $arg2);
+  call_user_func_array('someFunction', $args);
+
+  // ✅ Required - first-class callable syntax
+  $callable = $object->method(...);
+  $callable($arg1, $arg2);
+
+  $callable = someFunction(...);
+  $callable(...$args);
+
+  // Static methods
+  $callable = SomeClass::staticMethod(...);
+  $callable($arg);
+  ```
+
+### Exception Handling Rules
+
+**CatchThrowableNotExceptionRule**
 - **Forbids:** `catch (\Exception $e)`
 - **Requires:** `catch (\Throwable $e)`
 - **Rationale:** Catches both exceptions and errors (`TypeError`, `ParseError`, etc.)
@@ -100,7 +136,9 @@ These additional rules enforce Symfony-inspired MVC patterns in OpenEMR modules.
   }
   ```
 
-#### NoSuperGlobalsInControllersRule
+### Controller Rules
+
+**NoSuperGlobalsInControllersRule**
 - **Forbids:** `$_GET`, `$_POST`, `$_FILES`, `$_SERVER` in Controller classes
 - **Requires:** Symfony `Request` object methods
 - **Example:**
@@ -115,7 +153,7 @@ These additional rules enforce Symfony-inspired MVC patterns in OpenEMR modules.
   $filter = $request->query->get('filter');
   ```
 
-#### NoLegacyResponseMethodsRule
+**NoLegacyResponseMethodsRule**
 - **Forbids:** `header()`, `http_response_code()`, `die()`, `exit`, direct `echo` in controllers
 - **Requires:** Symfony `Response` objects
 - **Example:**
@@ -133,7 +171,7 @@ These additional rules enforce Symfony-inspired MVC patterns in OpenEMR modules.
   throw new ModuleException('Error');
   ```
 
-#### ControllersMustReturnResponseRule
+**ControllersMustReturnResponseRule**
 - **Forbids:** Controller methods returning `void` or no return type
 - **Requires:** Return type declaration of `Response` or subclass
 - **Example:**
@@ -151,24 +189,6 @@ These additional rules enforce Symfony-inspired MVC patterns in OpenEMR modules.
   }
   ```
 
-## Rule Configuration
-
-You can selectively enable rules by creating your own configuration:
-
-```neon
-# Custom phpstan.neon
-services:
-    # Just database rules
-    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenFunctionsRule
-      tags:
-          - phpstan.rules.rule
-
-    # Just module controller rules
-    - class: OpenCoreEMR\PHPStan\Rules\Module\NoSuperGlobalsInControllersRule
-      tags:
-          - phpstan.rules.rule
-```
-
 ## Baselines
 
 If you're adding these rules to an existing codebase, generate a baseline to exclude existing violations:
@@ -179,29 +199,14 @@ vendor/bin/phpstan analyze --generate-baseline
 
 New code will still be checked against all rules.
 
-## Migration Guides
-
-See [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for detailed migration patterns for each rule.
-
 ## Development
 
 ### Running Tests
 
 ```bash
-# Install dependencies
 composer install
-
-# Run PHPStan on the rules themselves
-vendor/bin/phpstan analyze
+vendor/bin/phpunit
 ```
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Follow existing code style and patterns
-2. Add tests for new rules
-3. Update documentation
 
 ## License
 

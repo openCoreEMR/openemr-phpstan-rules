@@ -18,7 +18,9 @@
     "require": {
         "php": "^8.2",
         "nikic/php-parser": "^5.0",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "spaze/phpstan-disallowed-calls": "^4.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.42",
@@ -39,12 +41,13 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true
-        }
+        },
+        "sort-packages": true
     },
     "extra": {
         "phpstan": {
             "includes": [
-                "module.neon"
+                "extension.neon"
             ]
         }
     },

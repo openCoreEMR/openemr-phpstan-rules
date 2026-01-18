@@ -1,15 +1,127 @@
 # PHPStan Extension for OpenEMR
 #
-# This is an alias for module.neon for backward compatibility.
-# By default, includes all rules for comprehensive analysis.
+# Rules for OpenEMR core and module development:
+# - Database: Forbid legacy SQL functions, methods, and Laminas-DB
+# - Http: Forbid raw curl_* functions
+# - Globals: Forbid direct $GLOBALS access
+# - Testing: Forbid @covers annotations
+# - LegacyPHP: Forbid call_user_func/call_user_func_array
+# - Module: Controller request/response handling
+# - Deprecation: Report usage of deprecated code (via phpstan/phpstan-deprecation-rules)
 #
 # Include this in your phpstan.neon with:
 #   includes:
 #     - vendor/opencoreemr/openemr-phpstan-rules/extension.neon
 #
 # @author    Michael A. Smith <michael@opencoreemr.com>
-# @copyright Copyright (c) 2025 OpenCoreEMR Inc
+# @copyright Copyright (c) 2026 OpenCoreEMR Inc
 # @license   https://github.com/openCoreEMR/openemr-phpstan-rules/blob/main/LICENSE GNU General Public License 3
+#
+# Note: spaze/phpstan-disallowed-calls and phpstan/phpstan-deprecation-rules are
+# automatically loaded by PHPStan's extension-installer. Do not include them
+# explicitly to avoid duplicate service registration errors.
 
-includes:
-    - module.neon
+parameters:
+    disallowedFunctionCalls:
+        # Legacy call_user_func functions
+        -
+            function: 'call_user_func()'
+            message: 'Use first-class callables instead of call_user_func().'
+            errorTip: 'Example: $callable = $object->method(...); $callable($args);'
+        -
+            function: 'call_user_func_array()'
+            message: 'Use first-class callables instead of call_user_func_array().'
+            errorTip: 'Example: $callable = someFunction(...); $callable(...$args);'
+
+        # Legacy SQL functions (use QueryUtils or DatabaseQueryTrait instead)
+        -
+            function: 'sqlQuery()'
+            message: 'Use QueryUtils::querySingleRow() or QueryUtils::fetchRecords() instead of sqlQuery().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlStatement()'
+            message: 'Use QueryUtils::sqlStatementThrowException() or QueryUtils::fetchRecords() instead of sqlStatement().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlInsert()'
+            message: 'Use QueryUtils::sqlInsert() instead of sqlInsert().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlFetchArray()'
+            message: 'Use QueryUtils::fetchRecords() or QueryUtils::fetchArrayFromResultSet() instead of sqlFetchArray().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlBeginTrans()'
+            message: 'Use QueryUtils::startTransaction() instead of sqlBeginTrans().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlCommitTrans()'
+            message: 'Use QueryUtils::commitTransaction() instead of sqlCommitTrans().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlRollbackTrans()'
+            message: 'Use QueryUtils::rollbackTransaction() instead of sqlRollbackTrans().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlStatementNoLog()'
+            message: 'Use QueryUtils::fetchRecordsNoLog() instead of sqlStatementNoLog().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlStatementThrowException()'
+            message: 'Use QueryUtils::sqlStatementThrowException() instead of global sqlStatementThrowException().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+        -
+            function: 'sqlQueryNoLog()'
+            message: 'Use QueryUtils::querySingleRow() instead of sqlQueryNoLog().'
+            errorTip: 'Or use DatabaseQueryTrait in your class'
+
+services:
+    # Database Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenClassesRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Database\ForbiddenStaticMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    # Http Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Http\ForbiddenCurlFunctionsRule
+      tags:
+          - phpstan.rules.rule
+
+    # Globals Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Globals\ForbiddenGlobalsAccessRule
+      tags:
+          - phpstan.rules.rule
+
+    # Testing Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Testing\NoCoversAnnotationOnClassRule
+      tags:
+          - phpstan.rules.rule
+
+    # Exception Handling Rules
+    - class: OpenCoreEMR\PHPStan\Rules\ExceptionHandling\CatchThrowableNotExceptionRule
+      tags:
+          - phpstan.rules.rule
+
+    # Module Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Module\NoSuperGlobalsInControllersRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Module\NoLegacyResponseMethodsRule
+      tags:
+          - phpstan.rules.rule
+
+    - class: OpenCoreEMR\PHPStan\Rules\Module\ControllersMustReturnResponseRule
+      tags:
+          - phpstan.rules.rule

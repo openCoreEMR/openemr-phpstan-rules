@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.0...0.9.1) (2026-03-16)
+
+
+### Dependencies
+
+* **deps:** bump actions/upload-artifact from 4 to 7 ([#21](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/21)) ([9a4d37a](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/9a4d37a8f78c0c81f6d0cabe2bdb167d446297d9))
+* **deps:** bump rhysd/actionlint from 1.7.10 to 1.7.11 ([#20](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/20)) ([9ba678b](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/9ba678b6d186ed06f135eab90585255fc18b56e8))
+
 ## [0.9.0](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.5.0...0.9.0) (2026-01-18)
 
 

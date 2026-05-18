@@ -12,6 +12,8 @@
  * @license   https://github.com/openCoreEMR/openemr-phpstan-rules/blob/main/LICENSE GNU General Public License 3
  */
 
+declare(strict_types=1);
+
 namespace OpenCoreEMR\PHPStan\Rules\ExceptionHandling;
 
 use PhpParser\Node;

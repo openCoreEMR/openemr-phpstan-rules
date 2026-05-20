@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.2](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.1...0.9.2) (2026-05-20)
+
+
+### Dependencies
+
+* **deps:** bump opencoreemr/github-workflows-public/.github/workflows/release-please-reusable.yml ([#26](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/26)) ([fd79dd4](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/fd79dd41ef0431369d16e271168ec5e833ed849d))
+* **deps:** bump opencoreemr/github-workflows-public/.github/workflows/release-please-reusable.yml ([#29](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/29)) ([0ac1b59](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/0ac1b59c94ae8a3894dfb88ee202d6c4da09a412))
+
 ## [0.9.1](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.0...0.9.1) (2026-05-07)
 
 

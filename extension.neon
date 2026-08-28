@@ -6,6 +6,7 @@
 # - Globals: Forbid direct $GLOBALS access
 # - Testing: Forbid @covers annotations
 # - LegacyPHP: Forbid call_user_func/call_user_func_array
+# - Logging: Forbid error_log() in favor of SystemLogger
 # - Module: Controller request/response handling
 # - Deprecation: Report usage of deprecated code (via phpstan/phpstan-deprecation-rules)
 #
@@ -32,6 +33,12 @@ parameters:
             function: 'call_user_func_array()'
             message: 'Use first-class callables instead of call_user_func_array().'
             errorTip: 'Example: $callable = someFunction(...); $callable(...$args);'
+
+        # Logging functions (use SystemLogger instead)
+        -
+            function: 'error_log()'
+            message: 'Use SystemLogger instead of error_log().'
+            errorTip: 'Example: (new SystemLogger())->error($message) or $this->logger->error($message)'
 
         # Legacy SQL functions (use QueryUtils or DatabaseQueryTrait instead)
         -

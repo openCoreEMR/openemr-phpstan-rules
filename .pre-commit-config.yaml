@@ -31,8 +31,8 @@ repos:
     - --autofix
     - --indent=2
 
-- repo: https://github.com/rhysd/actionlint
-  rev: v1.7.10
+- repo: https://github.com/openCoreEMR/actionlint
+  rev: v1.7.12-oce.1
   hooks:
   - id: actionlint
 

@@ -1,21 +1,19 @@
+# Calls the shared actionlint workflow. Do not add `paths:` to `pull_request`;
+# it breaks promotion to a required check (skipped run = missing check =
+# auto-merge stall). Path filtering on `push` is fine.
 name: actionlint
 
 on:
   push:
-    branches:
-    - main
+    branches: [main]
+    paths:
+    - .github/workflows/**
+    - .github/actions/**
   pull_request:
-    branches:
-    - main
+    branches: [main]
 
 jobs:
   actionlint:
-    name: Lint GitHub Actions workflows
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v7
-
-    - name: Run actionlint
-      uses: openCoreEMR/actionlint@v1.7.12-oce.1
+    uses: openCoreEMR/github-workflows-public/.github/workflows/actionlint.yml@1.0.1
+    permissions:
+      contents: read

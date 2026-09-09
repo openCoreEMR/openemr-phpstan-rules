@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.2...0.9.3) (2026-09-09)
+
+
+### Features
+
+* **rules:** forbid error_log() in favor of SystemLogger ([#19](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/19)) ([6ab6409](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/6ab640992835c40274b71f6a4a779ebf197ff7d9))
+
 ## [0.9.2](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.1...0.9.2) (2026-05-20)
 
 

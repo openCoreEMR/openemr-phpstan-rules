@@ -29,3 +29,13 @@ function onlyInFirstFile()
 function guardNamesAnotherFunction()
 {
 }
+
+if (!function_exists('relatedHelper') && !function_exists('compoundGuarded')) {
+    function compoundGuarded()
+    {
+    }
+}
+
+function eitherOrGuarded()
+{
+}

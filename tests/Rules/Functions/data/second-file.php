@@ -35,3 +35,15 @@ if (PHP_VERSION_ID >= 80000) {
     {
     }
 }
+
+if (!function_exists('compoundGuarded') and PHP_VERSION_ID >= 80000) {
+    function compoundGuarded()
+    {
+    }
+}
+
+if (!function_exists('eitherOrGuarded') || PHP_VERSION_ID >= 80000) {
+    function eitherOrGuarded()
+    {
+    }
+}

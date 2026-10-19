@@ -15,6 +15,9 @@ declare(strict_types=1);
 namespace OpenCoreEMR\PHPStan\Rules\Functions;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -28,8 +31,11 @@ use PHPStan\Collectors\Collector;
  * Records the start lines of declarations shaped like
  * `if (!function_exists('foo')) { function foo() {} }`.
  *
- * Only a direct child of the `if` body counts, and only when the literal names
- * the function being declared. Anything looser is not a reliable guard.
+ * The condition may AND the check with others, as in
+ * `if (!function_exists('bar') && !function_exists('foo'))`, because the body
+ * still only runs when `foo` is undeclared. Only a direct child of the `if`
+ * body counts, and only when a literal names the function being declared.
+ * Anything looser is not a reliable guard.
  *
  * @implements Collector<If_, list<int>>
  */
@@ -46,8 +52,8 @@ final class FunctionExistsGuardCollector implements Collector
      */
     public function processNode(Node $node, Scope $scope): ?array
     {
-        $guardedName = $this->guardedName($node);
-        if ($guardedName === null) {
+        $guardedNames = $this->guardedNames($node->cond);
+        if ($guardedNames === []) {
             return null;
         }
 
@@ -57,7 +63,7 @@ final class FunctionExistsGuardCollector implements Collector
                 continue;
             }
             $declared = $stmt->namespacedName ?? $stmt->name;
-            if (strtolower($declared->toString()) === $guardedName) {
+            if (in_array(strtolower($declared->toString()), $guardedNames, true)) {
                 $lines[] = $stmt->getStartLine();
             }
         }
@@ -66,26 +72,31 @@ final class FunctionExistsGuardCollector implements Collector
     }
 
     /**
-     * Lowercased function name from a `!function_exists('name')` condition.
+     * Lowercased names from every `!function_exists('name')` that the
+     * condition ANDs together.
+     *
+     * @return list<string>
      */
-    private function guardedName(If_ $node): ?string
+    private function guardedNames(Expr $cond): array
     {
-        $cond = $node->cond;
+        if ($cond instanceof BooleanAnd || $cond instanceof LogicalAnd) {
+            return [...$this->guardedNames($cond->left), ...$this->guardedNames($cond->right)];
+        }
         if (!$cond instanceof BooleanNot) {
-            return null;
+            return [];
         }
         $call = $cond->expr;
         if (!$call instanceof FuncCall || !$call->name instanceof Name) {
-            return null;
+            return [];
         }
         if ($call->name->toLowerString() !== 'function_exists') {
-            return null;
+            return [];
         }
         $args = $call->getArgs();
         if (!isset($args[0]) || !$args[0]->value instanceof String_) {
-            return null;
+            return [];
         }
 
-        return strtolower(ltrim($args[0]->value->value, '\\'));
+        return [strtolower(ltrim($args[0]->value->value, '\\'))];
     }
 }

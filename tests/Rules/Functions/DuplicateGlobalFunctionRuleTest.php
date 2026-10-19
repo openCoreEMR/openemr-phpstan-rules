@@ -48,10 +48,12 @@ final class DuplicateGlobalFunctionRuleTest extends RuleTestCase
                 'first-file.php:5 ' . sprintf(self::MESSAGE, 'sharedHelper'),
                 'first-file.php:21 ' . sprintf(self::MESSAGE, 'MixedCaseName'),
                 'first-file.php:29 ' . sprintf(self::MESSAGE, 'guardNamesAnotherFunction'),
+                'first-file.php:39 ' . sprintf(self::MESSAGE, 'eitherOrGuarded'),
                 'second-file.php:5 ' . sprintf(self::MESSAGE, 'sharedHelper'),
                 'second-file.php:15 ' . sprintf(self::MESSAGE, 'guardedHereOnly'),
                 'second-file.php:19 ' . sprintf(self::MESSAGE, 'mixedcasename'),
                 'second-file.php:24 ' . sprintf(self::MESSAGE, 'guardNamesAnotherFunction'),
+                'second-file.php:46 ' . sprintf(self::MESSAGE, 'eitherOrGuarded'),
             ],
             $this->reportedErrors([
                 __DIR__ . '/data/first-file.php',

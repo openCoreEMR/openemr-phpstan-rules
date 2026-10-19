@@ -3,8 +3,8 @@ parameters:
     paths:
         - src
 
-    # PHP version
-    phpVersion: 80100
+    # PHP version: match require.php in composer.json
+    phpVersion: 80200
 
     # Ignore errors in vendor
     excludePaths:

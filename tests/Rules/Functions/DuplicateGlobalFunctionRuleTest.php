@@ -19,7 +19,7 @@ use OpenCoreEMR\PHPStan\Rules\Functions\FunctionDeclarationCollector;
 use OpenCoreEMR\PHPStan\Rules\Functions\FunctionExistsGuardCollector;
 use PHPStan\File\RelativePathHelper;
 use PHPStan\Rules\Rule;
-use PHPStan\Testing\RuleTestCase;
+use OpenCoreEMR\PHPStan\Tests\RuleTestCase;
 
 /**
  * @extends RuleTestCase<DuplicateGlobalFunctionRule>
@@ -37,7 +37,7 @@ final class DuplicateGlobalFunctionRuleTest extends RuleTestCase
     {
         return [
             new FunctionDeclarationCollector(),
-            new FunctionExistsGuardCollector(),
+            new FunctionExistsGuardCollector($this->createReflectionProvider()),
         ];
     }
 
@@ -99,6 +99,23 @@ final class DuplicateGlobalFunctionRuleTest extends RuleTestCase
                 __DIR__ . '/data/first-file.php',
                 __DIR__ . '/data/namespaced-file.php',
                 __DIR__ . '/data/namespaced-copy.php',
+            ])
+        );
+    }
+
+    public function testNamespacedFunctionExistsIsNotAGuard(): void
+    {
+        // Declare the namespace's function_exists() at runtime so reflection resolves calls to it
+        require_once __DIR__ . '/data/shadowed-declaration.php';
+        $name = 'OpenCoreEMR\PHPStan\Tests\Rules\Functions\Shadowed\shadowedHelper';
+        $this->assertSame(
+            [
+                'shadowed-copy.php:8 ' . sprintf(self::MESSAGE, $name),
+                'shadowed-function-exists.php:10 ' . sprintf(self::MESSAGE, $name),
+            ],
+            $this->reportedErrors([
+                __DIR__ . '/data/shadowed-function-exists.php',
+                __DIR__ . '/data/shadowed-copy.php',
             ])
         );
     }

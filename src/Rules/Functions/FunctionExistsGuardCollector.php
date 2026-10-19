@@ -26,6 +26,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
+use PHPStan\Reflection\ReflectionProvider;
 
 /**
  * Records the start lines of declarations shaped like
@@ -35,12 +36,18 @@ use PHPStan\Collectors\Collector;
  * `if (!function_exists('bar') && !function_exists('foo'))`, because the body
  * still only runs when `foo` is undeclared. Only a direct child of the `if`
  * body counts, and only when a literal names the function being declared.
- * Anything looser is not a reliable guard.
+ * Anything looser is not a reliable guard, and so is a call that resolves to
+ * a namespaced function_exists() instead of PHP's.
  *
  * @implements Collector<If_, list<int>>
  */
-final class FunctionExistsGuardCollector implements Collector
+final readonly class FunctionExistsGuardCollector implements Collector
 {
+    public function __construct(
+        private ReflectionProvider $reflectionProvider,
+    ) {
+    }
+
     public function getNodeType(): string
     {
         return If_::class;
@@ -52,7 +59,7 @@ final class FunctionExistsGuardCollector implements Collector
      */
     public function processNode(Node $node, Scope $scope): ?array
     {
-        $guardedNames = $this->guardedNames($node->cond);
+        $guardedNames = $this->guardedNames($node->cond, $scope);
         if ($guardedNames === []) {
             return null;
         }
@@ -77,10 +84,10 @@ final class FunctionExistsGuardCollector implements Collector
      *
      * @return list<string>
      */
-    private function guardedNames(Expr $cond): array
+    private function guardedNames(Expr $cond, Scope $scope): array
     {
         if ($cond instanceof BooleanAnd || $cond instanceof LogicalAnd) {
-            return [...$this->guardedNames($cond->left), ...$this->guardedNames($cond->right)];
+            return [...$this->guardedNames($cond->left, $scope), ...$this->guardedNames($cond->right, $scope)];
         }
         if (!$cond instanceof BooleanNot) {
             return [];
@@ -89,7 +96,8 @@ final class FunctionExistsGuardCollector implements Collector
         if (!$call instanceof FuncCall || !$call->name instanceof Name) {
             return [];
         }
-        if ($call->name->toLowerString() !== 'function_exists') {
+        $resolved = $this->reflectionProvider->resolveFunctionName($call->name, $scope);
+        if ($resolved === null || strtolower($resolved) !== 'function_exists') {
             return [];
         }
         $args = $call->getArgs();

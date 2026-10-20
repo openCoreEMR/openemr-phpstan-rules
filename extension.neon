@@ -8,6 +8,7 @@
 # - LegacyPHP: Forbid call_user_func/call_user_func_array
 # - Logging: Forbid error_log() in favor of SystemLogger
 # - Module: Controller request/response handling
+# - Functions: Forbid declaring one function name in more than one file
 # - Deprecation: Report usage of deprecated code (via phpstan/phpstan-deprecation-rules)
 #
 # Include this in your phpstan.neon with:
@@ -130,5 +131,18 @@ services:
           - phpstan.rules.rule
 
     - class: OpenCoreEMR\PHPStan\Rules\Module\ControllersMustReturnResponseRule
+      tags:
+          - phpstan.rules.rule
+
+    # Function Rules
+    - class: OpenCoreEMR\PHPStan\Rules\Functions\FunctionDeclarationCollector
+      tags:
+          - phpstan.collector
+
+    - class: OpenCoreEMR\PHPStan\Rules\Functions\FunctionExistsGuardCollector
+      tags:
+          - phpstan.collector
+
+    - class: OpenCoreEMR\PHPStan\Rules\Functions\DuplicateGlobalFunctionRule
       tags:
           - phpstan.rules.rule

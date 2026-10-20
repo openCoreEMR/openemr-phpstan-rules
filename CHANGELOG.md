@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.3](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.2...0.9.3) (2026-10-20)
+
+
+### Features
+
+* **rules:** add DuplicateGlobalFunctionRule ([b08f206](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/b08f206f2efaf50e5864a2c8fb5cf49edb392042))
+* **rules:** forbid declaring the same function in more than one file ([a8291e2](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/a8291e2ced466985aac6a5160d69d8b4d356d244))
+* **rules:** forbid error_log() in favor of SystemLogger ([#19](https://github.com/openCoreEMR/openemr-phpstan-rules/issues/19)) ([6ab6409](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/6ab640992835c40274b71f6a4a779ebf197ff7d9))
+* **rules:** only accept function_exists guards that resolve to PHP's ([16cc171](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/16cc171a227c6c44602c60259d7652c8f027c546))
+* **rules:** recognize function_exists guards combined with AND ([1c83247](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/1c83247f6627b550aac479861a85a4800b1ef0a9))
+
 ## [0.9.2](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.1...0.9.2) (2026-05-20)
 
 

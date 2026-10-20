@@ -18,8 +18,13 @@
     "mixed",
     "never",
     "PHPStan\\Analyser\\Scope",
+    "PHPStan\\Collectors\\Collector",
+    "PHPStan\\File\\RelativePathHelper",
+    "PHPStan\\Node\\CollectedDataNode",
     "PHPStan\\Node\\InClassMethodNode",
     "PHPStan\\Reflection\\Php\\PhpFunctionFromParserNodeReflection",
+    "PHPStan\\Reflection\\ReflectionProvider",
+    "PHPStan\\Rules\\IdentifierRuleError",
     "PHPStan\\Rules\\Rule",
     "PHPStan\\Rules\\RuleErrorBuilder"
   ],

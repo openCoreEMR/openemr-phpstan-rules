@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.42",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^13.4",
         "rector/rector": "^2.0",
         "squizlabs/php_codesniffer": "^4.0"
     },

@@ -25,7 +25,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 class NoSuperGlobalsInControllersRule implements Rule
 {
-    private const FORBIDDEN_SUPERGLOBALS = [
+    private const array FORBIDDEN_SUPERGLOBALS = [
         '_GET' => '$request->query->get()',
         '_POST' => '$request->request->get()',
         '_FILES' => '$request->files->get()',

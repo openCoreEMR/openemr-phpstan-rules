@@ -29,7 +29,7 @@ class ForbiddenClassesRule implements Rule
     /**
      * Forbidden Laminas-DB namespace patterns
      */
-    private const FORBIDDEN_NAMESPACES = [
+    private const array FORBIDDEN_NAMESPACES = [
         'Laminas\\Db\\Adapter\\',
         'Laminas\\Db\\Sql\\',
         'Laminas\\Db\\TableGateway\\',
@@ -74,11 +74,6 @@ class ForbiddenClassesRule implements Rule
 
     private function isForbiddenImport(string $importedName): bool
     {
-        foreach (self::FORBIDDEN_NAMESPACES as $forbiddenNamespace) {
-            if (str_starts_with($importedName, $forbiddenNamespace)) {
-                return true;
-            }
-        }
-        return false;
+        return array_any(self::FORBIDDEN_NAMESPACES, fn(string $forbiddenNamespace): bool => str_starts_with($importedName, $forbiddenNamespace));
     }
 }

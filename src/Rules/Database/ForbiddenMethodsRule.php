@@ -33,7 +33,7 @@ class ForbiddenMethodsRule implements Rule
      * (Ideally, these would be scoped to a specific class/interface, but most are
      * targeting globals lacking sufficient type info)
      */
-    private const FORBIDDEN_METHODS = [
+    private const array FORBIDDEN_METHODS = [
         'GenID' => 'Use QueryUtils::generateId() or QueryUtils::ediGenerateId() instead.',
     ];
 

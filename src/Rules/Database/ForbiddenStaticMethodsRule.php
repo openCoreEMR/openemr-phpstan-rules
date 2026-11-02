@@ -31,7 +31,7 @@ class ForbiddenStaticMethodsRule implements Rule
     /**
      * Map of forbidden classes and static methods to their error messages
      */
-    private const FORBIDDEN_METHODS = [
+    private const array FORBIDDEN_METHODS = [
         'OpenEMR\\Common\\Database\\QueryUtils' => [
             'startTransaction' => 'Use QueryUtils::inTransaction() wrapper instead.',
             'commitTransaction' => 'Use QueryUtils::inTransaction() wrapper instead.',

@@ -30,7 +30,7 @@ class ForbiddenCurlFunctionsRule implements Rule
     /**
      * Pattern to match all curl_* functions
      */
-    private const CURL_FUNCTION_PATTERN = '/^curl_/i';
+    private const string CURL_FUNCTION_PATTERN = '/^curl_/i';
 
     public function getNodeType(): string
     {

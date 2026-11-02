@@ -28,7 +28,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 class NoLegacyResponseMethodsRule implements Rule
 {
-    private const FORBIDDEN_FUNCTIONS = [
+    private const array FORBIDDEN_FUNCTIONS = [
         'header' => 'Use RedirectResponse, Response, or JsonResponse',
         'http_response_code' => 'Use Response constructor with status code',
         'die' => 'Throw an exception instead',

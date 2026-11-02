@@ -26,7 +26,7 @@ return RectorConfig::configure()
         jobSize: 12
     )
     ->withPhpSets()
-    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withPhpVersion(PhpVersion::PHP_84)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

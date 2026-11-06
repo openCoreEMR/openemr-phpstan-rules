@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.0](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.3...0.10.0) (2026-11-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* the package now requires PHP ^8.4. The known consumers already resolve on 8.4 or later and we run on 8.5. Upstream dropped 8.2 on its current lines. Holding 8.2 kept the package from taking PHPUnit 13, which needs PHP 8.4.
+
+### Features
+
+* require PHP 8.4 and move to PHPUnit 13 ([0c4f8a3](https://github.com/openCoreEMR/openemr-phpstan-rules/commit/0c4f8a30ebe2931d0dfc15ebf7feef6446b96ac5))
+
 ## [0.9.3](https://github.com/openCoreEMR/openemr-phpstan-rules/compare/0.9.2...0.9.3) (2026-10-20)
 
 
